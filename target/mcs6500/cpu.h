@@ -85,6 +85,14 @@ typedef struct MCS6500CPU {
 typedef CPUMCS6500State CPUArchState;
 typedef MCS6500CPU ArchCPU;
 
+#define MMU_USER_IDX 0
+#define MMU_NOMMU 0
+
+static inline int cpu_mmu_index(CPUMCS6500State *env, bool ifetch)
+{
+    return MMU_NOMMU;
+}
+
 #include "exec/cpu-all.h"
 
 #endif // MCS6500_CPU_H
