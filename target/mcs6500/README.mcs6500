@@ -1,0 +1,7 @@
+MCS6500 target
+============================
+
+The purpose of this subsytem is to emulates the mcs6500 processor family, this
+include the popular 6502. This one will be the one that will be chosen as a
+starting point to write this target? Why that? Because there' a lot of samples
+to try out there.
