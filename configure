@@ -7828,10 +7828,15 @@ case "$target_name" in
     gdb_xml_files="cf-core.xml cf-fp.xml m68k-fp.xml"
     TARGET_SYSTBL_ABI=common
   ;;
+  mcs6500)
+    TARGET_ARCH=mcs6500
+    mttcg="yes"
+    target_bigendian="yes"
+    #target_softmmu="no"
+  ;;
   microblaze|microblazeel)
     TARGET_ARCH=microblaze
     TARGET_SYSTBL_ABI=common
-    bflt="yes"
     echo "TARGET_ABI32=y" >> $config_target_mak
   ;;
   mips|mipsel)
