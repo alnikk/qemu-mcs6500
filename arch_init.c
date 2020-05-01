@@ -63,6 +63,8 @@ int graphic_depth = 32;
 #define QEMU_ARCH QEMU_ARCH_LM32
 #elif defined(TARGET_M68K)
 #define QEMU_ARCH QEMU_ARCH_M68K
+#elif defined(TARGET_MCS6500)
+#define QEMU_ARCH QEMU_ARCH_MCS6500
 #elif defined(TARGET_MICROBLAZE)
 #define QEMU_ARCH QEMU_ARCH_MICROBLAZE
 #elif defined(TARGET_MIPS)
