@@ -35,6 +35,8 @@
 #define SR_V 6 /* Overflow */
 #define SR_N 7 /* Negative result */
 
+#define PC_MASK 0xFFFF
+
 typedef struct CPUMCS6500State CPUMCS6500State;
 struct CPUMCS6500State {
     uint16_t pc;
