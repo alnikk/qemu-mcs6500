@@ -93,6 +93,14 @@ static inline int cpu_mmu_index(CPUMCS6500State *env, bool ifetch)
     return MMU_NOMMU;
 }
 
+static inline void cpu_get_tb_cpu_state(CPUMCS6500State *env, target_ulong *pc,
+                                        target_ulong *cs_base, uint32_t *flags)
+{
+    *pc = env->pc;
+    *cs_base = 0;
+    *flags = 0;
+}
+
 #include "exec/cpu-all.h"
 
 #endif // MCS6500_CPU_H
