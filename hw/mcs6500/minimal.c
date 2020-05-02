@@ -23,6 +23,7 @@
 #include "hw/hw.h"
 #include "hw/sysbus.h"
 #include "hw/mcs6500/minimal.h"
+#include "target/mcs6500/cpu.h"
 
 static void minimal_init(MachineState *machine)
 {
@@ -33,6 +34,7 @@ static void machine_minimal_init(MachineClass *mc)
     mc->desc = "Minimal machine for testing purposes";
     mc->init = minimal_init;
     mc->is_default = true;
+    mc->default_cpu_type = TYPE_MCS6500_CPU;
 }
 
 DEFINE_MACHINE("minimal", machine_minimal_init)
