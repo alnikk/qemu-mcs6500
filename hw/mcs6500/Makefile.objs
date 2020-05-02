@@ -1,1 +1,1 @@
-obj-y += minimal.o
+obj-y += minimal.o mcs6500.o
