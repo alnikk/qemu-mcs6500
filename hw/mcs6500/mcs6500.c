@@ -25,6 +25,8 @@ static void mcs6500_init(Object *obj)
 
 static void mcs6500_realize(DeviceState *dev, Error **errp)
 {
+    SocMCS6500State *soc = SOC_MCS6500(dev);
+    soc->cpu = MCS6500_CPU(cpu_create(TYPE_MCS6500_CPU));
 }
 
 static void mcs6500_class_init(ObjectClass *oc, void *data)
