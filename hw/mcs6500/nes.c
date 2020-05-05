@@ -25,12 +25,21 @@
 #include "hw/mcs6500/nes.h"
 #include "qapi/error.h"
 #include "exec/address-spaces.h"
+#include "sysemu/sysemu.h"
 #include "target/mcs6500/cpu.h"
+#include "hw/mcs6500/nes-cartridge.h"
 
 static void nes_init(MachineState *machine)
 {
     SocMCS6500State *cpu;
     MemoryRegion *mirrors;
+    NesCartridgeState *cartridge;
+    Error *err = NULL;
+
+    if (bios_name == NULL) {
+        error_report("Please provide a -bios <path to nes rom file> argument");
+        exit(1);
+    }
 
     cpu = SOC_MCS6500(object_new(TYPE_SOC_MCS6500));
     object_property_add_child(OBJECT(machine), "soc", OBJECT(cpu),
@@ -47,6 +56,13 @@ static void nes_init(MachineState *machine)
         memory_region_add_subregion(get_system_memory(), nes_get_base_ram_mirror(i),
                 &mirrors[i]);
     }
+
+    cartridge = NES_CARTRIDGE(object_new(TYPE_NES_CARTRIDGE));
+    cartridge->rom_path = strdup(bios_name);
+    object_property_add_child(OBJECT(machine), "cartridge", OBJECT(cartridge),
+                            &error_abort);
+    object_property_set_bool(OBJECT(cartridge), true, "realized", &err);
+    object_unref(OBJECT(cartridge));
 }
 
 static void nes_machine_init(MachineClass *mc)
