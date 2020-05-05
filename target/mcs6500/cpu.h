@@ -23,7 +23,7 @@
 #include "hw/core/cpu.h"
 #include "exec/cpu-defs.h"
 
-#define TYPE_MCS6500_CPU "mcs6500"
+#define TYPE_MCS6500_CPU "6500"
 #define CPU_RESOLVING_TYPE TYPE_MCS6500_CPU
 
 #define SR_C 0 /* Carry */
