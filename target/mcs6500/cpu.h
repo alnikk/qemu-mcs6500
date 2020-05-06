@@ -49,11 +49,11 @@ struct CPUMCS6500State {
 
 
 #define MCS6500_CPU_CLASS(klass) \
-    OBJECT_CLASS_CHECK(MCS6500Class, (klass), TYPE_MCS6500_CPU)
+    OBJECT_CLASS_CHECK(MCS6500CPUClass, (klass), TYPE_MCS6500_CPU)
 #define MCS6500_CPU(obj) \
     OBJECT_CHECK(MCS6500CPU, (obj), TYPE_MCS6500_CPU)
 #define MCS6500_CPU_GET_CLASS(obj) \
-    OBJECT_GET_CLASS(MCS6500Class, (obj), TYPE_MCS6500_CPU)
+    OBJECT_GET_CLASS(MCS6500CPUClass, (obj), TYPE_MCS6500_CPU)
 
 /**
  * MCS6500CPUClass:
@@ -102,6 +102,8 @@ static inline void cpu_get_tb_cpu_state(CPUMCS6500State *env, target_ulong *pc,
     *cs_base = 0;
     *flags = 0;
 }
+
+void mcs6500_tcg_init(void);
 
 #include "exec/cpu-all.h"
 
