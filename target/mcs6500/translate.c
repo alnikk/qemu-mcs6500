@@ -61,3 +61,7 @@ void restore_state_to_opc(CPUMCS6500State *env, TranslationBlock *tb,
 {
     env->pc = (uint16_t) (data[0] & PC_MASK);
 }
+
+void mcs6500_tcg_init(void)
+{
+}
