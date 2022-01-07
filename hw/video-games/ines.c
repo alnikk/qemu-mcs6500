@@ -146,7 +146,7 @@ int ines_load_file(const char *path)
     ssize_t size_ret;
     int ret = 0;
 
-    ines_fd = open(path, 'r');
+    ines_fd = open(path, O_RDONLY);
     if (ines_fd < 0) {
         return ines_fd;
     }
