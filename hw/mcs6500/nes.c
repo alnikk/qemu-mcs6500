@@ -35,6 +35,7 @@ static void nes_init(MachineState *machine)
     MemoryRegion *mirrors;
     NesCartridgeState *cartridge;
     Error *err = NULL;
+    const char *bios_name = machine->firmware;
 
     if (bios_name == NULL) {
         error_report("Please provide a -bios <path to nes rom file> argument");
