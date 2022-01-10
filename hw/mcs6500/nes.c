@@ -59,9 +59,8 @@ static void nes_init(MachineState *machine)
 
     cartridge = NES_CARTRIDGE(object_new(TYPE_NES_CARTRIDGE));
     cartridge->rom_path = strdup(bios_name);
-    object_property_add_child(OBJECT(machine), "cartridge", OBJECT(cartridge),
-                            &error_abort);
-    object_property_set_bool(OBJECT(cartridge), true, "realized", &err);
+    object_property_add_child(OBJECT(machine), "cartridge", OBJECT(cartridge));
+    object_property_set_bool(OBJECT(cartridge), "realized", true, &err);
     object_unref(OBJECT(cartridge));
 }
 
