@@ -43,9 +43,8 @@ static void nes_init(MachineState *machine)
     }
 
     cpu = SOC_MCS6500(object_new(TYPE_SOC_MCS6500));
-    object_property_add_child(OBJECT(machine), "soc", OBJECT(cpu),
-                              &error_abort);
-    object_property_set_bool(OBJECT(cpu), true, "realized", &err);
+    object_property_add_child(OBJECT(machine), "soc", OBJECT(cpu));
+    object_property_set_bool(OBJECT(cpu), "realized", true, &err);
     object_unref(OBJECT(cpu));
 
     mirrors = g_new0(MemoryRegion, NES_NB_MIRRORS);
