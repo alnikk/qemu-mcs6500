@@ -43,6 +43,14 @@
 
 #define PC_MASK 0xFFFF
 
+#define EXCP_RESET 1 << 0
+#define EXCP_IRQ   1 << 1
+#define EXCP_NMI   1 << 2
+
+#define VECTOR_ADDR_RESET 0xFFFC
+#define VECTOR_ADDR_IRQ 0xFFFE
+#define VECTOR_ADDR_NMI 0xFFFA
+
 typedef struct CPUMOS65XXState CPUMOS65XXState;
 struct CPUMOS65XXState {
     uint16_t pc;
@@ -51,6 +59,9 @@ struct CPUMOS65XXState {
     uint8_t x;
     uint8_t y;
     uint8_t acc;
+
+    uint8_t excp;
+    uint8_t nIRQ;
 };
 
 typedef struct MOS65XXCPU {

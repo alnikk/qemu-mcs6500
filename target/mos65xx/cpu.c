@@ -94,17 +94,40 @@ static void mos65xx_cpu_realizefn(DeviceState *dev, Error **errp)
     mcc->parent_realize(dev, errp);
 }
 
+static void mos65xx_cpu_set_int(void *opaque, int irq, int level)
+{
+    MOS65XXCPU *cpu = opaque;
+    CPUMOS65XXState *env = &cpu->env;
+    CPUState *cs = CPU(cpu);
+    uint64_t mask = (1ull << irq);
+
+    if (level) {
+        env->excp |= mask;
+        cpu_interrupt(cs, CPU_INTERRUPT_HARD);
+    } else {
+        env->excp &= ~mask;
+        if (env->excp == 0) {
+            cpu_reset_interrupt(cs, CPU_INTERRUPT_HARD);
+        }
+    }
+}
+
 static void mos65xx_cpu_initfn(Object *obj)
 {
     MOS65XXCPU *cpu = MOS65XX_CPU(obj);
 
     cpu_set_cpustate_pointers(cpu);
+
+    qdev_init_gpio_in_named(DEVICE(cpu), mos65xx_cpu_set_int, "interrupt lines",
+            cpu->env.nIRQ);
 }
 
 #include "hw/core/tcg-cpu-ops.h"
 
 static const struct TCGCPUOps mos65xx_tcg_ops = {
     .initialize = mos65xx_cpu_tcg_init,
+    .cpu_exec_interrupt = mos65xx_cpu_exec_interrupt,
+    .do_interrupt = mos65xx_cpu_do_interrupt,
 };
 
 static ObjectClass *mos65xx_cpu_class_by_name(const char *cpu_model)
