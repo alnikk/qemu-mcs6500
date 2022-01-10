@@ -21,6 +21,8 @@
 #include "qemu/osdep.h"
 #include "qapi/error.h"
 #include "cpu.h"
+#include "hw/core/tcg-cpu-ops.h"
+#include "helper.h"
 
 static bool mcs6500_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
                        MMUAccessType qemu_access_type, int mmu_idx,
@@ -70,6 +72,14 @@ static void mcs6500_cpu_initfn(Object *obj)
     cpu_set_cpustate_pointers(cpu);
 }
 
+static const struct TCGCPUOps mcs6500_tcg_ops = {
+    .initialize = mcs6500_cpu_tcg_init,
+    .synchronize_from_tb = mcs6500_cpu_synchronize_from_tb,
+    .cpu_exec_interrupt = mcs6500_cpu_exec_interrupt,
+    .tlb_fill = mcs6500_cpu_tlb_fill,
+    .do_interrupt = mcs6500_cpu_do_interrupt,
+};
+
 static void mcs6500_cpu_class_init(ObjectClass *c, void *data)
 {
     MCS6500CPUClass *mcc = MCS6500_CPU_CLASS(c);
@@ -80,8 +90,7 @@ static void mcs6500_cpu_class_init(ObjectClass *c, void *data)
                                     &mcc->parent_realize);
     device_class_set_parent_reset(dc, mcs6500_cpu_reset, &mcc->parent_reset);
 
-    cc->tlb_fill = mcs6500_cpu_tlb_fill;
-    cc->tcg_initialize = mcs6500_tcg_init;
+    cc->tcg_ops = &mcs6500_tcg_ops;
 }
 
 static const TypeInfo mcs6500_cpus_type_infos[] = {

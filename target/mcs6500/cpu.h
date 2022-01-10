@@ -103,7 +103,8 @@ static inline void cpu_get_tb_cpu_state(CPUMCS6500State *env, target_ulong *pc,
     *flags = 0;
 }
 
-void mcs6500_tcg_init(void);
+void mcs6500_cpu_tcg_init(void);
+void mcs6500_cpu_synchronize_from_tb(CPUState *cs, const TranslationBlock *tb);
 
 #include "exec/cpu-all.h"
 
