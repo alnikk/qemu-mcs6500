@@ -22,13 +22,6 @@
 #include "exec/exec-all.h"
 #include "cpu.h"
 
-bool mos65xx_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
-                       MMUAccessType qemu_access_type, int mmu_idx,
-                       bool probe, uintptr_t retaddr)
-{
-    return true;
-}
-
 static void mos65xx_cpu_reset(DeviceState *dev)
 {
     CPUState *s = CPU(dev);
@@ -128,6 +121,13 @@ static const struct TCGCPUOps mos65xx_tcg_ops = {
     .initialize = mos65xx_cpu_tcg_init,
     .cpu_exec_interrupt = mos65xx_cpu_exec_interrupt,
     .do_interrupt = mos65xx_cpu_do_interrupt,
+    .tlb_fill = mos65xx_cpu_tlb_fill,
+};
+
+#include "hw/core/sysemu-cpu-ops.h"
+
+static const struct SysemuCPUOps mos65xx_sysemu_ops = {
+    .get_phys_page_debug = mos65xx_cpu_get_phys_page_debug,
 };
 
 static ObjectClass *mos65xx_cpu_class_by_name(const char *cpu_model)
@@ -157,5 +157,7 @@ static void mos65xx_cpu_class_init(ObjectClass *c, void *data)
     cc->has_work = &mos65xx_cpu_has_work;
     cc->set_pc = &mos65xx_cpu_set_pc;
     cc->dump_state = &mos65xx_cpu_dump_state;
+    cc->memory_rw_debug = mos65xx_cpu_memory_rw_debug;
+    cc->sysemu_ops = &mos65xx_sysemu_ops;
     cc->tcg_ops = &mos65xx_tcg_ops;
 }

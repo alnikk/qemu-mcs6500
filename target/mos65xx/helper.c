@@ -89,3 +89,29 @@ void mos65xx_cpu_do_interrupt(CPUState *cs)
 
     cs->exception_index = -1;
 }
+
+hwaddr mos65xx_cpu_get_phys_page_debug(CPUState *cs, vaddr addr)
+{
+    return addr;
+}
+
+int mos65xx_cpu_memory_rw_debug(CPUState *cs, vaddr addr, uint8_t *buf,
+                            int len, bool is_write)
+{
+    return cpu_memory_rw_debug(cs, addr, buf, len, is_write);
+}
+
+bool mos65xx_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
+                      MMUAccessType access_type, int mmu_idx,
+                      bool probe, uintptr_t retaddr)
+{
+    /* access to memory. nothing special */
+    hwaddr paddr = address;
+    int prot = PAGE_READ | PAGE_WRITE | PAGE_EXEC;
+    MemTxAttrs attrs = {};
+
+    tlb_set_page_with_attrs(cs, address, paddr, attrs, prot,
+                            mmu_idx, TARGET_PAGE_SIZE);
+
+    return true;
+}
