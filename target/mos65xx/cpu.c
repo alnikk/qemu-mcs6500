@@ -161,3 +161,54 @@ static void mos65xx_cpu_class_init(ObjectClass *c, void *data)
     cc->sysemu_ops = &mos65xx_sysemu_ops;
     cc->tcg_ops = &mos65xx_tcg_ops;
 }
+
+static void mos65xx_6502_initfn(Object *obj)
+{
+    MOS65XXCPU *cpu = MOS65XX_CPU(obj);
+    CPUMOS65XXState *env = &cpu->env;
+
+    env->nIRQ = 2;
+}
+
+typedef struct MOS65XXCPUInfo {
+    const char *name;
+    void (*initfn)(Object *obj);
+} MOS65XXCPUInfo;
+
+
+static void mos65xx_cpu_list_entry(gpointer data, gpointer user_data)
+{
+    const char *typename = object_class_get_name(OBJECT_CLASS(data));
+
+    qemu_printf("%s\n", typename);
+}
+
+void mos65xx_cpu_list(void)
+{
+    GSList *list;
+    list = object_class_get_list_sorted(TYPE_MOS65XX_CPU, false);
+    g_slist_foreach(list, mos65xx_cpu_list_entry, NULL);
+    g_slist_free(list);
+}
+
+#define DEFINE_MOS65XX_CPU_TYPE(initfn, version) \
+    { \
+        .parent = TYPE_MOS65XX_CPU, \
+        .instance_init = initfn, \
+        .name = "mos65"version, \
+    }
+
+static const TypeInfo mos65xx_cpu_type_info[] = {
+    {
+        .name = TYPE_MOS65XX_CPU,
+        .parent = TYPE_CPU,
+        .instance_size = sizeof(MOS65XXCPU),
+        .instance_init = mos65xx_cpu_initfn,
+        .class_size = sizeof(MOS65XXCPUClass),
+        .class_init = mos65xx_cpu_class_init,
+        .abstract = true,
+    },
+    DEFINE_MOS65XX_CPU_TYPE(mos65xx_6502_initfn, "02"),
+};
+
+DEFINE_TYPES(mos65xx_cpu_type_info)
