@@ -1,0 +1,2 @@
+config MOS65XX
+    bool

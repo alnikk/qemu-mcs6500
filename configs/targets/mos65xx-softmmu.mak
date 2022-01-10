@@ -1,0 +1,1 @@
+TARGET_ARCH=mos65xx
