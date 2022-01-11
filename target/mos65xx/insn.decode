@@ -1,0 +1,70 @@
+#
+# Mos65xx instruction decode definitions.
+#
+# Copyright (c) 2022 Alexandre Guyon <alex.guyon78@gmail.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, see <http://www.gnu.org/licenses/>.
+
+%imm    16:8
+%abs    8:8 16:8
+
+&imm_val    imm_p:int8_t
+&zpg_val    zpg_p:int8_t
+&ind_val    ind_p:int8_t
+&abs_val    abs_p:int16_t
+
+@op_imm_val        .... .... .... ....               &imm_val imm_p=%imm
+@op_zpg_val        .... .... .... ....               &zpg_val zpg_p=%imm
+@op_abs_val        .... .... .... .... .... ....     &abs_val abs_p=%abs
+@op_ind_val        .... .... .... ....               &ind_val ind_p=%imm
+
+LDA_IMM            1010 1001 .... ....               @op_imm_val
+LDA_ZPG            1010 0101 .... ....               @op_zpg_val
+LDA_ZPG_X          1011 0101 .... ....               @op_zpg_val
+LDA_ABS            1010 1101 .... .... .... ....     @op_abs_val
+LDA_ABS_Y          1011 1001 .... .... .... ....     @op_abs_val
+LDA_ABS_X          1011 1101 .... .... .... ....     @op_abs_val
+LDA_X_IND          1010 0001 .... ....               @op_ind_val
+LDA_IND_Y          1011 0001 .... ....               @op_ind_val
+LDX_IMM            1010 0010 .... ....               @op_imm_val
+LDX_ZPG            1010 0110 .... ....               @op_zpg_val
+LDX_ZPG_Y          1011 0110 .... ....               @op_zpg_val
+LDX_ABS            1010 1110 .... .... .... ....     @op_abs_val
+LDX_ABS_Y          1011 1110 .... .... .... ....     @op_abs_val
+LDY_IMM            1010 0000 .... ....               @op_imm_val
+LDY_ZPG            1010 0100 .... ....               @op_zpg_val
+LDY_ZPG_X          1011 0100 .... ....               @op_zpg_val
+LDY_ABS            1010 1100 .... .... .... ....     @op_abs_val
+LDY_ABS_X          1011 1100 .... .... .... ....     @op_abs_val
+
+STA_ZPG            1000 0101 .... ....               @op_zpg_val
+STA_ZPG_X          1001 0101 .... ....               @op_zpg_val
+STA_ABS            1000 1101 .... .... .... ....     @op_abs_val
+STA_ABS_X          1001 1101 .... .... .... ....     @op_abs_val
+STA_ABS_Y          1000 1001 .... .... .... ....     @op_abs_val
+STA_X_IND          1000 0001 .... ....               @op_ind_val
+STA_IND_Y          1001 0001 .... ....               @op_ind_val
+STX_ZPG            1000 0110 .... ....               @op_zpg_val
+STX_ZPG_Y          1001 0110 .... ....               @op_zpg_val
+STX_ABS            1000 1110 .... .... .... ....     @op_abs_val
+STY_ZPG            1000 0100 .... ....               @op_zpg_val
+STY_ZPG_X          1001 0100 .... ....               @op_zpg_val
+STY_ABS            1000 1100 .... .... .... ....     @op_abs_val
+
+TAX                1010 1010
+TAY                1010 1000
+TXA                1000 1010
+TYA                1001 1000
+
+BREAK              0000 0000

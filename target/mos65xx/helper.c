@@ -22,6 +22,9 @@
 #include "exec/exec-all.h"
 #include "cpu.h"
 #include "hw/core/tcg-cpu-ops.h"
+#include "exec/helper-proto.h"
+#include "sysemu/runstate.h"
+#include "qemu/main-loop.h"
 
 bool mos65xx_cpu_exec_interrupt(CPUState *cs, int interrupt_request)
 {
@@ -114,4 +117,43 @@ bool mos65xx_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
                             mmu_idx, TARGET_PAGE_SIZE);
 
     return true;
+}
+
+void helper_unsupported(CPUMOS65XXState *env)
+{
+    CPUState *cs = env_cpu(env);
+
+    qemu_log("unsupported\n");
+    cpu_loop_exit(cs);
+}
+
+void helper_break(CPUMOS65XXState *env)
+{
+    CPUState *cs = env_cpu(env);
+
+    qemu_mutex_lock_iothread();
+    cs->exception_index = EXCP_DEBUG;
+    qemu_mutex_unlock_iothread();
+
+    cpu_loop_exit(cs);
+}
+
+void helper_quit(CPUMOS65XXState *env)
+{
+    CPUState *cs = env_cpu(env);
+
+    qemu_mutex_lock_iothread();
+    qatomic_set(&cs->exit_request, true);
+    cs->exception_index = EXCP_HALTED;
+    qemu_mutex_unlock_iothread();
+    qemu_system_shutdown_request(SHUTDOWN_CAUSE_GUEST_SHUTDOWN);
+    /* wait all thread being executed */
+    sleep(1);
+
+    {
+        FILE *dump = fopen ("core_dump.pout", "w+");
+        cpu_dump_state(cs, dump, 0);
+        fclose(dump);
+    }
+    cpu_loop_exit(cs);
 }

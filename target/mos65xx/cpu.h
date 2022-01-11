@@ -42,6 +42,7 @@
 #define SR_N 7 /* Negative result */
 
 #define PC_MASK 0xFFFF
+#define PC_LAST_INSN 0xFFF9
 
 #define EXCP_RESET 1 << 0
 #define EXCP_IRQ   1 << 1
