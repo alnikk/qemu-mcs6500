@@ -159,6 +159,10 @@ static void mos65xx_cpu_class_init(ObjectClass *c, void *data)
     cc->dump_state = &mos65xx_cpu_dump_state;
     cc->memory_rw_debug = mos65xx_cpu_memory_rw_debug;
     cc->sysemu_ops = &mos65xx_sysemu_ops;
+    cc->gdb_read_register = mos65xx_cpu_gdb_read_register;
+    cc->gdb_write_register = mos65xx_cpu_gdb_write_register;
+    cc->gdb_num_core_regs = 6;
+    cc->gdb_core_xml_file = "mos65xx-cpu.xml";
     cc->tcg_ops = &mos65xx_tcg_ops;
 }
 

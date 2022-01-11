@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- Copyright (C) 2018-2022 Free Software Foundation, Inc.
+
+     Copying and distribution of this file, with or without modification,
+     are permitted in any medium without royalty provided the copyright
+     notice and this notice are preserved.  -->
+
+<!-- Register numbers are hard-coded in order to maintain backward
+     compatibility with older versions of tools that didn't use xml
+     register descriptions.  -->
+
+<!DOCTYPE feature SYSTEM "gdb-target.dtd">
+<feature name="org.gnu.gdb.mos65xx.cpu">
+  <reg name="pc" bitsize="8" type="int" regnum="0"/>
+  <reg name="sp" bitsize="8" type="int"/>
+  <reg name="sr" bitsize="8" type="int"/>
+  <reg name="x" bitsize="8" type="int"/>
+  <reg name="y" bitsize="8" type="int"/>
+  <reg name="acc" bitsize="8" type="int"/>
+</feature>

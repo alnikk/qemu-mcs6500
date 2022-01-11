@@ -1,2 +1,3 @@
 TARGET_ARCH=mos65xx
 TARGET_WORDS_BIGENDIAN=y
+TARGET_XML_FILES= gdb-xml/mos65xx-cpu.xml
