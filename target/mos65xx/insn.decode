@@ -76,4 +76,10 @@ ORA_ABS_Y          0001 1001 .... .... .... ....     @op_abs_val
 ORA_X_IND          0000 0001 .... ....               @op_ind_val
 ORA_IND_Y          0001 0001 .... ....               @op_ind_val
 
+ASL                0000 1010
+ASL_ZPG            0000 0110 .... ....               @op_zpg_val
+ASL_ZPG_X          0001 0110 .... ....               @op_zpg_val
+ASL_ABS            0000 1110 .... .... .... ....     @op_abs_val
+ASL_ABS_X          0001 1110 .... .... .... ....     @op_abs_val
+
 BREAK              0000 0000

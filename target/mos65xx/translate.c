@@ -92,10 +92,17 @@ static void imm_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_
 
 }
 
-static void zpg_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
+static TCGv zpg_addressing_get_addr(DisasContext *ctx, uint32_t value)
 {
     TCGv addr = tcg_temp_new();
     tcg_gen_movi_tl(addr, value);
+
+    return addr;
+}
+
+static void zpg_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
+{
+    TCGv addr = zpg_addressing_get_addr(ctx, value);
 
     func(ctx, reg, addr);
 
@@ -515,6 +522,55 @@ static bool trans_ORA_IND_Y(DisasContext *ctx, arg_ORA_IND_Y *a)
 {
     ind_y_addressing(ctx, ora, (void*)NULL, a->ind_p);
 
+    return true;
+}
+
+static void asl(DisasContext *ctx, TCGv value, TCGv unused)
+{
+    TCGv shift = tcg_temp_new();
+    tcg_gen_movi_tl(shift, 1); // we rotate only one bit
+
+    tcg_gen_shl_i32(value, value, shift);
+
+    tcg_temp_free(shift);
+}
+
+static bool trans_ASL(DisasContext *ctx, arg_ASL *a)
+{
+    asl(ctx, cpu_acc, (void*)NULL);
+    return true;
+}
+
+// TODO (aguyon) check other helpers, it seems it operates on addresses instead of values
+// that's good for st/ld functions but not for ora or ASL for instance. Rename fileds to avoid confusion
+static bool trans_ASL_ZPG(DisasContext *ctx, arg_ASL_ZPG *a)
+{
+    TCGv addr = zpg_addressing_get_addr(ctx, a->zpg_p);
+    TCGv value = tcg_temp_new();
+
+    tcg_gen_qemu_ld8u(value, addr, 0);
+
+    asl(ctx, value, (void*)NULL);
+
+    tcg_gen_qemu_st8(value, addr, 0);
+
+    tcg_temp_free(value);
+    tcg_temp_free(addr);
+    return true;
+}
+
+static bool trans_ASL_ZPG_X(DisasContext *ctx, arg_ASL_ZPG_X *a)
+{
+    return true;
+}
+
+static bool trans_ASL_ABS(DisasContext *ctx, arg_ASL_ABS *a)
+{
+    return true;
+}
+
+static bool trans_ASL_ABS_X(DisasContext *ctx, arg_ASL_ABS_X *a)
+{
     return true;
 }
 
