@@ -81,6 +81,17 @@ uint32_t decode_insn_load(DisasContext *ctx);
 
 typedef void (*trans_Func)(DisasContext *ctx, TCGv, TCGv);
 
+static void imm_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
+{
+    TCGv val = tcg_temp_local_new();
+    tcg_gen_movi_tl(val, value);
+
+    func(ctx, reg, val);
+
+    tcg_temp_free(val);
+
+}
+
 static void zpg_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
     TCGv addr = tcg_temp_local_new();
@@ -442,6 +453,67 @@ static bool trans_TXA(DisasContext *ctx, arg_TXA *a)
 static bool trans_TYA(DisasContext *ctx, arg_TXA *a)
 {
     tcg_gen_qemu_ld8u(cpu_acc, cpu_y, 0);
+
+    return true;
+}
+
+static void ora(DisasContext *ctx, TCGv unused, TCGv value)
+{
+    tcg_gen_or_i32(cpu_acc, cpu_acc, value);
+}
+
+static bool trans_ORA_IMM(DisasContext *ctx, arg_ORA_IMM *a)
+{
+    imm_addressing(ctx, ora, (void*)NULL, a->imm_p);
+
+    return true;
+}
+
+static bool trans_ORA_ZPG(DisasContext *ctx, arg_ORA_ZPG *a)
+{
+    zpg_addressing(ctx, ora, (void*)NULL, a->zpg_p);
+
+    return true;
+}
+
+static bool trans_ORA_ZPG_X(DisasContext *ctx, arg_ORA_ZPG_X *a)
+{
+    zpg_x_addressing(ctx, ora, (void*)NULL, a->zpg_p);
+
+    return true;
+}
+
+static bool trans_ORA_ABS(DisasContext *ctx, arg_ORA_ABS *a)
+{
+    abs_addressing(ctx, ora, (void*)NULL, a->abs_p);
+
+    return true;
+}
+
+static bool trans_ORA_ABS_X(DisasContext *ctx, arg_ORA_ABS_X *a)
+{
+    abs_x_addressing(ctx, ora, (void*)NULL, a->abs_p);
+
+    return true;
+}
+
+static bool trans_ORA_ABS_Y(DisasContext *ctx, arg_ORA_ABS_Y *a)
+{
+    abs_y_addressing(ctx, ora, (void*)NULL, a->abs_p);
+
+    return true;
+}
+
+static bool trans_ORA_X_IND(DisasContext *ctx, arg_ORA_X_IND *a)
+{
+    ind_x_addressing(ctx, ora, (void*)NULL, a->ind_p);
+
+    return true;
+}
+
+static bool trans_ORA_IND_Y(DisasContext *ctx, arg_ORA_IND_Y *a)
+{
+    ind_y_addressing(ctx, ora, (void*)NULL, a->ind_p);
 
     return true;
 }

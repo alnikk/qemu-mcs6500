@@ -67,4 +67,13 @@ TAY                1010 1000
 TXA                1000 1010
 TYA                1001 1000
 
+ORA_IMM            0000 1001 .... ....               @op_imm_val
+ORA_ZPG            0000 0101 .... ....               @op_zpg_val
+ORA_ZPG_X          0001 0101 .... ....               @op_zpg_val
+ORA_ABS            0000 1101 .... .... .... ....     @op_abs_val
+ORA_ABS_X          0001 1101 .... .... .... ....     @op_abs_val
+ORA_ABS_Y          0001 1001 .... .... .... ....     @op_abs_val
+ORA_X_IND          0000 0001 .... ....               @op_ind_val
+ORA_IND_Y          0001 0001 .... ....               @op_ind_val
+
 BREAK              0000 0000
