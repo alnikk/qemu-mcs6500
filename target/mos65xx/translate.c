@@ -83,7 +83,7 @@ typedef void (*trans_Func)(DisasContext *ctx, TCGv, TCGv);
 
 static void imm_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv val = tcg_temp_local_new();
+    TCGv val = tcg_temp_new();
     tcg_gen_movi_tl(val, value);
 
     func(ctx, reg, val);
@@ -94,7 +94,7 @@ static void imm_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_
 
 static void zpg_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv addr = tcg_temp_local_new();
+    TCGv addr = tcg_temp_new();
     tcg_gen_movi_tl(addr, value);
 
     func(ctx, reg, addr);
@@ -104,8 +104,8 @@ static void zpg_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_
 
 static void zpg_x_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv xAddr = tcg_temp_local_new();
-    TCGv addr = tcg_temp_local_new();
+    TCGv xAddr = tcg_temp_new();
+    TCGv addr = tcg_temp_new();
 
     tcg_gen_movi_tl(addr, value);
     tcg_gen_add_tl(xAddr, cpu_x, addr);
@@ -118,8 +118,8 @@ static void zpg_x_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint3
 
 static void zpg_y_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv xAddr = tcg_temp_local_new();
-    TCGv addr = tcg_temp_local_new();
+    TCGv xAddr = tcg_temp_new();
+    TCGv addr = tcg_temp_new();
 
     tcg_gen_movi_tl(addr, value);
     tcg_gen_add_tl(xAddr, cpu_y, addr);
@@ -132,7 +132,7 @@ static void zpg_y_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint3
 
 static void abs_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv addr = tcg_temp_local_new();
+    TCGv addr = tcg_temp_new();
     tcg_gen_movi_tl(addr, value);
 
     func(ctx, reg, addr);
@@ -142,8 +142,8 @@ static void abs_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_
 
 static void abs_x_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv xAddr = tcg_temp_local_new();
-    TCGv addr = tcg_temp_local_new();
+    TCGv xAddr = tcg_temp_new();
+    TCGv addr = tcg_temp_new();
 
     tcg_gen_movi_tl(addr, value);
     tcg_gen_add_tl(xAddr, cpu_x, addr);
@@ -156,8 +156,8 @@ static void abs_x_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint3
 
 static void abs_y_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv xAddr = tcg_temp_local_new();
-    TCGv addr = tcg_temp_local_new();
+    TCGv xAddr = tcg_temp_new();
+    TCGv addr = tcg_temp_new();
 
     tcg_gen_movi_tl(addr, value);
     tcg_gen_add_tl(xAddr, cpu_y, addr);
@@ -170,9 +170,9 @@ static void abs_y_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint3
 
 static void ind_y_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv xAddr = tcg_temp_local_new();
-    TCGv pAddr = tcg_temp_local_new();
-    TCGv addr = tcg_temp_local_new();
+    TCGv xAddr = tcg_temp_new();
+    TCGv pAddr = tcg_temp_new();
+    TCGv addr = tcg_temp_new();
 
     tcg_gen_movi_tl(pAddr, value);
     tcg_gen_qemu_ld16u(addr, pAddr, 0); // FIXME (alnikk) endianness?
@@ -188,8 +188,8 @@ static void ind_y_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint3
 
 static void ind_x_addressing(DisasContext *ctx, trans_Func func, TCGv reg, uint32_t value)
 {
-    TCGv xAddr = tcg_temp_local_new();
-    TCGv pAddr = tcg_temp_local_new();
+    TCGv xAddr = tcg_temp_new();
+    TCGv pAddr = tcg_temp_new();
 
     tcg_gen_movi_tl(pAddr, value);
     tcg_gen_add_tl(xAddr, cpu_x, pAddr);
