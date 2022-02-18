@@ -1,0 +1,5 @@
+#!/bin/sh
+
+./configure --target-list=mos65xx-softmmu --disable-user --disable-tools --disable-fdt --enable-plugins && make -j2 && make plugins
+make check-tcg
+./build/qemu-system-mos65xx -machine none -nographic -m 0xFFFF,maxmem=0x10000 -mem-path /tmp/mos65xx-ram -cpu mos6502 -device loader,file=./build/tests/tcg/mos65xx-softmmu/test_load_store
