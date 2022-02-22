@@ -80,6 +80,10 @@ fi
 : ${cross_as_tricore="tricore-as"}
 : ${cross_ld_tricore="tricore-ld"}
 
+# mos65xx is special too, doesn't have any compiler neither
+: ${cross_as_mos65xx="wla-6502"}
+: ${cross_ld_mos65xx="wlalink"}
+
 for target in $target_list; do
   arch=${target%%-*}
 
@@ -161,6 +165,13 @@ for target in $target_list; do
       container_hosts=x86_64
       container_image=debian-mips-cross
       container_cross_cc=mips-linux-gnu-gcc
+      ;;
+    mos65xx-softmmu*)
+      container_hosts=x86_64
+      container_image=debian-mos65xx-cross
+      #container_cross_cc="echo 'no compiler available on this platform' ; false ;"
+      container_cross_as="wla-6502"
+      container_cross_ld="wlalink"
       ;;
     nios2-*)
       container_hosts=x86_64
@@ -278,6 +289,12 @@ for target in $target_list; do
       if has $target_as && has $target_ld; then
           case $target in
               tricore-softmmu)
+                  echo "CROSS_CC_GUEST=$target_as" >> $config_target_mak
+                  echo "CROSS_AS_GUEST=$target_as" >> $config_target_mak
+                  echo "CROSS_LD_GUEST=$target_ld" >> $config_target_mak
+                  got_cross_cc=yes
+                  ;;
+              mos65xx-softmmu)
                   echo "CROSS_CC_GUEST=$target_as" >> $config_target_mak
                   echo "CROSS_AS_GUEST=$target_as" >> $config_target_mak
                   echo "CROSS_LD_GUEST=$target_ld" >> $config_target_mak

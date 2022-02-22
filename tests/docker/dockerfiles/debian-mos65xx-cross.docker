@@ -1,0 +1,28 @@
+#
+# Docker cross-compiler target
+#
+# This docker target builds on the debian stretch base image
+#
+FROM docker.io/library/debian:stretch-slim
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt install -yy eatmydata && \
+    DEBIAN_FRONTEND=noninteractive eatmydata \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        curl \
+        gettext \
+        git \
+        cmake
+
+RUN git clone https://github.com/vhelin/wla-dx \
+    && cd wla-dx \
+    && mkdir build && cd build \
+    && cmake .. \
+    && cmake --build . --config Release -DCMAKE_INSTALL_PREFIX=/usr \
+    && cmake -P cmake_install.cmake -DCMAKE_INSTALL_PREFIX=/usr
+
+# This image can only build a very minimal QEMU as well as the tests
+ENV DEF_TARGET_LIST mos65xx-softmmu
+ENV QEMU_CONFIGURE_OPTS --disable-user --disable-tools --disable-fdt

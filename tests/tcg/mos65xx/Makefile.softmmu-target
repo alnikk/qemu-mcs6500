@@ -1,0 +1,15 @@
+#
+# mos65xx softmmu tests
+#
+
+MOS65XX_SRC = $(SRC_PATH)/tests/tcg/mos65xx/
+QEMU_OPTS+=-machine none -nographic -m 0xFFFF -cpu mos6502 $(EXTFLAGS) -device loader$(COMMA)file=$<$(COMMA)force-raw=on
+
+TESTS += test_load_store
+
+%.o: $(MOS65XX_SRC)/%.S
+	$(AS) -o $@ $<
+
+%: %.o
+	$(LD) $(MOS65XX_SRC)/$@.ld $@
+
